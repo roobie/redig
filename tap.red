@@ -7,7 +7,7 @@ Red [
 	Tabs: 4
 	License: "Apache License 2.0 https://www.apache.org/licenses/LICENSE-2.0"
 	Usage: {
-		See %tap-test.red for an example of programming with the harness.
+		See tap-test.red for an example of programming with the harness.
 
 		When run, the harness will produce TAP version 13 output, which in turn
 		can be consumed by TAP version 13 aware consumers.
@@ -27,12 +27,12 @@ Red [
 		⨯ T1: [1 = 2]
 		⨯ fail 1
 	}
-	Note(s): [
-		{TAP version 13 specification can be found here:
-		https://testanything.org/tap-version-13-specification.html}
+	Notes: comment [
+		TAP version 13 specification can be found here:
+		https://testanything.org/tap-version-13-specification.html
 
-		{Failing tests does not cause the harness to output the YAML which allows for
-		after-the-fact debugging by comparing expected and actual values.}
+		Failing tests does not cause the harness to output the YAML which allows for
+		after-the-fact debugging by comparing expected and actual values.
 	]
 ]
 
