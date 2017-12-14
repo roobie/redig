@@ -3,18 +3,19 @@ Red [
 	Author: "Björn Roberg"
 	Purpose: "To provide an easy and helpful way of unit-testing code."
 	File: %test.red
+	Tabs: 4
 	License: "Apache License 2.0 https://www.apache.org/licenses/LICENSE-2.0"
 ]
 
 test: func [] [
 	context [
 		current-test: none
-		ok-tests: copy #()
-		failed-tests: copy #()
+		ok-assertions: copy #()
+		failed-assertions: copy #()
 
 		reset: function [][
-			self/ok-tests: copy #()
-			self/failed-tests: copy #()
+			self/ok-assertions: copy #()
+			self/failed-assertions: copy #()
 		]
 
 		suite: function [
@@ -28,18 +29,32 @@ test: func [] [
 			/local
 				results
 				val
+				ok-count
+				failed-count
 		][
 			do (blk)
-			; print [
-			; 	pad/left length? ok-tests 4
-			; 	"# OKAY"
-			; ]
-			; print [
-			; 	pad/left length? failed-tests 4
-			; 	"# FAIL"
-			; ]
-			foreach test-name keys-of self/failed-tests [
-				val: select failed-tests test-name
+
+			ok-count: 0
+			foreach lst values-of self/ok-assertions [
+				ok-count: ok-count + length? lst
+			]
+			print [
+				pad/left ok-count 4
+				"# OKAY"
+			]
+			failed-count: 0
+			foreach lst values-of self/failed-assertions [
+				failed-count: failed-count + length? lst
+			]
+			print [
+				pad/left failed-count 4
+				"# FAIL"
+			]
+			total-assertion-count: (ok-count + failed-count)
+			; prin "1.."
+			; print total-assertion-count
+			foreach test-name keys-of self/failed-assertions [
+				val: select failed-assertions test-name
 				if not zero? length? val [
 					print ["Test [" test-name "] failed"]
 					foreach fail val [
@@ -50,8 +65,8 @@ test: func [] [
 
 			results: context [
 				tests: context [
-					ok: copy ok-tests
-					failed: copy failed-tests
+					ok: copy ok-assertions
+					failed: copy failed-assertions
 				]
 			]
 			self/reset
@@ -68,8 +83,8 @@ test: func [] [
 				result
 		][
 			self/current-test: name
-			put self/ok-tests name (copy [])
-			put self/failed-tests name (copy [])
+			put self/ok-assertions name (copy [])
+			put self/failed-assertions name (copy [])
 
 			result: try (blk)
 			print ["Test [" pad name 20 "] completed"]
@@ -86,19 +101,32 @@ test: func [] [
 				otherwise false, will store the block which then will be `print`ed.
 			}
 			blk[block!]
+			/msg _msg
 			/local lst res
 		][
 			res: try (blk)
 			either error? res [
-				lst: select self/failed-tests self/current-test
-				append/only lst reduce [(mold/only blk) res]
+				lst: select self/failed-assertions self/current-test
+				either msg [
+					append/only lst reduce [(mold/only blk) _msg res]
+				][
+					append/only lst reduce [(mold/only blk) res]
+				]
 			][
 				either res [
-					lst: select self/ok-tests self/current-test
-					append/only lst (mold/only blk)
+					lst: select self/ok-assertions self/current-test
+					either msg [
+						append/only lst reduce [(mold/only blk) _msg]
+					][
+						append/only lst (mold/only blk)
+					]
 				][
-					lst: select self/failed-tests self/current-test
-					append/only lst (mold/only blk)
+					lst: select self/failed-assertions self/current-test
+					either msg [
+						append/only lst reduce [(mold/only blk) _msg]
+					][
+						append/only lst (mold/only blk)
+					]
 				]
 			]
 		]
