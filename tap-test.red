@@ -15,19 +15,23 @@ no-print: func [blk /local result][
 do %tap.red
 T: harness
 
-T/suite 5 [
+T/suite 1 [
 	T/case "T1" [
-		T/assert [1 = 1]
-		T/assert [1 = 1]
-		T/assert [1 = 1]
-		T/assert [1 = 1]
-		T/assert/msg [2 = 2] "Yes, two will be two"
+		; T/assert [1 = 1]
+		; T/assert [1 = 1]
+		; T/assert [1 = 1]
+		; T/assert [1 = 1]
+		; T/assert/msg [2 = 2] "Yes, two will be two"
 
-		T/assert [1 = 2]
-		T/assert/msg [2 = 4] "Oops, two is not four"
+		; T/assert [1 = 2]
+		; T/assert/msg [2 = 4] "Oops, two is not four"
 	]
 	T/case "Err" [
 		T/assert/msg [1 + "2"] "Should show as error"
+
+		a: #(a: 1 b: 2)
+		T/assert [(a) = [1 2]]
+		T/assert/msg [(a) = [1 2]] "Should maybe equal"
 	]
 ]
 

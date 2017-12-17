@@ -36,6 +36,10 @@ Red [
 	]
 ]
 
+remove-new-lines: func [s[string!]][
+	replace/all s "^/" ""
+]
+
 harness: func [] [
 	context [
 		current-test: none
@@ -104,12 +108,15 @@ harness: func [] [
 				prin self/current-index
 				prin [" -" self/current-test]
 				prin ": "
-				res: replace/all (to string! res) "^/" ""
+				; res: replace/all (to string! res) "^/" ""
+				print "# Diagnostic"
+				print "---"
 				either msg [
-					print reduce [_msg (mold blk) res]
+					print reduce [_msg (mold blk) "^/" res]
 				][
-					print reduce [(mold blk) res]
+					print reduce [(mold blk) "^/" res]
 				]
+				print "..."
 			][
 				either res [
 					prin "ok "
@@ -123,6 +130,24 @@ harness: func [] [
 					print reduce [_msg (mold blk)]
 				][
 					print reduce [(mold blk)]
+				]
+				if not res [
+					temp: compose/only blk
+					found: temp/1
+					operator: temp/2
+					expected: temp/3
+					; probe temp/1
+					print "# Diagnostic"
+					print "---"
+					if msg [
+						print ["message:" _msg]
+					]
+					print "severity: fail"
+					print "data:"
+					print ["    operator:" (trim/lines mold operator)]
+					print ["    expected:" (trim/lines mold expected)]
+					print ["    actual:" (trim/lines mold found)]
+					print "..."
 				]
 			]
 		]
