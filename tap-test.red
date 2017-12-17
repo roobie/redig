@@ -15,7 +15,7 @@ no-print: func [blk /local result][
 do %tap.red
 T: harness
 
-T/suite/count 5 [
+T/suite 5 [
 	T/case "T1" [
 		T/assert [1 = 1]
 		T/assert [1 = 1]

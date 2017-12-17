@@ -14,7 +14,7 @@ fsm1: make-finite-state-machine [a b c][
 	[c b]
 ]
 
-T/suite/count 8 [
+T/suite 8 [
 	T/case "transitions" [
 		;-- initial state should be the first element in the states-spec block
 		T/assert [fsm1/current-state = 'a]

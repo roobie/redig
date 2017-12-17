@@ -6,7 +6,7 @@ do %func.red
 do %tap.red
 T: harness
 
-T/suite/count 44 [
+T/suite 44 [
 	T/case "f/constantly" [
 		c1: f/constantly 1
 		T/assert [c1 = 1]

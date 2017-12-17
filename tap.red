@@ -45,33 +45,29 @@ harness: func [] [
 			{
 				This function accepts a block which will be passed to `do`.
 			}
-			/count _count[integer!] "The expected total count of assertions"
+			count[integer!] "The expected total count of assertions"
 			blk[block!] "The block of code to `do`, usually 1..* `case`s"
 			/local
 		][
 			print "TAP version 13"
-			if count [
-				prin "1.."
-				print _count
-			]
+			prin "1.."
+			print count
 
 			do (blk) ;-- run the code
 
-			if count [
-				;-- check that there was not too many or too few assertions
-				if self/current-index < _count [
-					prin "not ok "
-					prin self/current-index
-					prin " - "
-					print " Actual test count is short of plan"
-				]
-				if self/current-index > _count [
-					self/current-index: self/current-index + 1
-					prin "not ok "
-					prin self/current-index
-					prin " - "
-					print " Actual test count exceeds plan"
-				]
+			;-- check that there was not too many or too few assertions
+			if self/current-index < count [
+				prin "not ok "
+				prin self/current-index
+				prin " - "
+				print " Actual test count is short of plan"
+			]
+			if self/current-index > count [
+				self/current-index: self/current-index + 1
+				prin "not ok "
+				prin self/current-index
+				prin " - "
+				print " Actual test count exceeds plan"
 			]
 		]
 
